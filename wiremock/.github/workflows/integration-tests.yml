@@ -1,0 +1,53 @@
+name: Integration Tests – WireMock Lab
+
+on:
+  push:
+    branches: [ main, develop, 'feature/**' ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  integration-tests:
+    name: Run Integration Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('app/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build e executa testes via Docker Compose
+        run: |
+          docker compose up \
+            --build \
+            --abort-on-container-exit \
+            --exit-code-from app-tests
+
+      - name: Publica relatório JUnit
+        uses: mikepenz/action-junit-report@v4
+        if: always()
+        with:
+          report_paths: 'reports/**/*.xml'
+          detailed_summary: true
+          include_passed: true
+
+      - name: Upload relatórios Surefire
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: surefire-reports-${{ github.run_number }}
+          path: reports/
+          retention-days: 10
+
+      - name: Derruba containers
+        if: always()
+        run: docker compose down --volumes --remove-orphans

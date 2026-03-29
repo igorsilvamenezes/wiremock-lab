@@ -21,7 +21,7 @@ class TransferIT {
     @Test
     @DisplayName("POST /api/transfers → 201 com transferId e status PROCESSING")
     void shouldCreateTransferSuccessfully() {
-        
+
         TransferRequest request = new TransferRequest(
             "ACC-00123",
             "ACC-00456",
@@ -42,7 +42,7 @@ class TransferIT {
         String transferId = response.jsonPath().getString("transferId");
         String status     = response.jsonPath().getString("status");
 
-        assertNotNull(transferId,                         "TransferId não deve ser null");
+        assertNotNull(transferId,                        "TransferId não deve ser null");
         assertTrue(transferId.startsWith("TRF-"),        "TransferId deve iniciar com TRF-");
         assertEquals("PROCESSING", status,               "Status inicial deve ser PROCESSING");
     }
