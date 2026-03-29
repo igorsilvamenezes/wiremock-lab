@@ -1,0 +1,58 @@
+{
+  "mappings": [
+    {
+      "name": "POST transfer - created",
+      "request": {
+        "method": "POST",
+        "url": "/api/transfers",
+        "headers": {
+          "Content-Type": {
+            "contains": "application/json"
+          }
+        },
+        "bodyPatterns": [
+          { "matchesJsonPath": "$.amount" },
+          { "matchesJsonPath": "$.sourceAccount" },
+          { "matchesJsonPath": "$.destinationAccount" }
+        ]
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json",
+          "Location": "/api/transfers/TRF-{{randomValue type='NUMERIC' length=8}}"
+        },
+        "jsonBody": {
+          "transferId": "TRF-{{randomValue type='NUMERIC' length=8}}",
+          "status": "PROCESSING",
+          "message": "Transfer received and is being processed",
+          "estimatedCompletion": "{{now offset='30 seconds' format='yyyy-MM-dd\\'T\\'HH:mm:ss\\'Z\\''}}"
+        },
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "name": "POST transfer - insufficient funds",
+      "request": {
+        "method": "POST",
+        "url": "/api/transfers",
+        "bodyPatterns": [
+          {
+            "matchesJsonPath": "$.sourceAccount[?(@=='BROKE-ACCOUNT')]"
+          }
+        ]
+      },
+      "response": {
+        "status": 422,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "error": "INSUFFICIENT_FUNDS",
+          "message": "Source account does not have enough balance",
+          "code": "ERR-4221"
+        }
+      }
+    }
+  ]
+}

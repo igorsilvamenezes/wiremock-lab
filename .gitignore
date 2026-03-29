@@ -1,0 +1,16 @@
+# Maven
+app/target/
+*.class
+*.jar
+
+# relatórios gerados
+reports/
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
