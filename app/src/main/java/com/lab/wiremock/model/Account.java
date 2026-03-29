@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.math.BigDecimal;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public classe Account {
+public class Account {
 
     private String id;
     private String owner;
