@@ -7,4 +7,5 @@ RUN mvn dependency:go-offline -q
 
 COPY src ./src
 
-CMD ["mvn", "test", "-e", "-B"]
+# CMD ["mvn", "test", "-e", "-B"]
+ENTRYPOINT ["sh", "-c", "mvn test -Dwiremock.base.url=${WIREMOCK_BASE_URL} -e -B"]

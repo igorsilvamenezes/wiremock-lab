@@ -18,6 +18,7 @@ public final class ApiClient {
         
         SPEC = new RequestSpecBuilder()
                 .setBaseUri(baseUrl)
+                .setBasePath("") // ISSO LIMPA A DUPLICAÇÃO
                 .setContentType(ContentType.JSON)
                 .setAccept(ContentType.JSON)
                 .addHeader("X-Client-Id", "wiremock-lab")

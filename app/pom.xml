@@ -60,7 +60,21 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
-        </dependency>        
+        </dependency> 
+
+        <dependency>
+            <groupId>org.wiremock</groupId>
+            <artifactId>wiremock-standalone</artifactId>
+            <version>3.5.4</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <version>2.2</version>
+            <scope>test</scope>
+        </dependency>
 
 
     </dependencies>
@@ -73,7 +87,8 @@
                 <version>3.2.5</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <wiremock.base.url>${env.WIREMOCK_BASE_URL}</wiremock.base.url>
+                        <!-- <wiremock.base.url>${env.WIREMOCK_BASE_URL}</wiremock.base.url> -->
+                        <wiremock.base.url>${wiremock.base.url}</wiremock.base.url>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>

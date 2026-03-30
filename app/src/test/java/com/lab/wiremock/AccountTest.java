@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("integration")
 @DisplayName("Account API – Testes de Integração")
-class AccountIT {
+class AccountTest {
 
     private static final String ACCOUNTS_PATH = "/api/accounts/{id}";
 
@@ -22,14 +22,18 @@ class AccountIT {
         String accountId = "ACC-00123";
 
         Account account =
-            given(ApiClient.spec())
+            given()
+                .spec(ApiClient.spec())
                 .pathParam("id", accountId)
             .when()
                 .get(ACCOUNTS_PATH)
+                // .get("/api/accounts/{id}", accountId) 
             .then()
                 .statusCode(200)
                 .extract()
                 .as(Account.class);
+
+        System.out.println("URL Base: " + System.getProperty("wiremock.base.url"));
 
         assertNotNull(account,                             "Account não deve ser null");
         assertEquals(accountId,  account.getId(),          "ID deve corresponder ao path");
@@ -43,7 +47,8 @@ class AccountIT {
     @DisplayName("GET /api/accounts/not-found → 404 com error body")
     void shouldReturn404WhenAccountDoesNotExist() {
         Response response =
-            given(ApiClient.spec())
+            given()
+                .spec(ApiClient.spec())
                 .pathParam("id", "not-found")
             .when()
                 .get(ACCOUNTS_PATH)
